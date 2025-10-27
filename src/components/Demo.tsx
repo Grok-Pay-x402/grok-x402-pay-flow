@@ -5,14 +5,37 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-const USD1_CONTRACT = "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d";
-const GIGGLE_FUND_WALLET = "0xc7f501d25ea088aefca8b4b3ebd936aae12bf4a4";
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import { parseUnits } from "viem";
+import { bsc } from "wagmi/chains";
+const USD1_CONTRACT = "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d" as `0x${string}`;
+const GIGGLE_FUND_WALLET = "0xc7f501d25ea088aefca8b4b3ebd936aae12bf4a4" as `0x${string}`;
+
+// ERC20 Transfer ABI
+const ERC20_ABI = [
+  {
+    name: "transfer",
+    type: "function",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "to", type: "address" },
+      { name: "amount", type: "uint256" }
+    ],
+    outputs: [{ name: "", type: "bool" }]
+  }
+] as const;
 
 export const Demo = ({
   isWalletConnected
 }: {
   isWalletConnected: boolean;
 }) => {
+  const { address } = useAccount();
+  const { writeContract, data: hash, isPending: isWriting } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  });
+  
   const [prompt, setPrompt] = useState("");
   const [useCase, setUseCase] = useState("chat");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +49,7 @@ export const Demo = ({
   };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isWalletConnected) {
+    if (!isWalletConnected || !address) {
       toast.error("Please connect wallet first");
       return;
     }
@@ -34,17 +57,44 @@ export const Demo = ({
       toast.error("Please enter a prompt");
       return;
     }
+    
     setIsLoading(true);
     setResult(null);
     setImageUrl(null);
     setTxHash(null);
     
     try {
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      const mockTxHash = `0x${Math.random().toString(16).substr(2, 64)}`;
-      setTxHash(mockTxHash);
-      toast.success(`Payment verified: ${costs[useCase as keyof typeof costs]} USD1`);
+      // Step 1: Send payment transaction
+      toast.info("Sign the transaction to send 0.0001 USD1 to Giggle Academy Fund...");
+      
+      const amount = parseUnits("0.0001", 18); // Assuming 18 decimals for USD1
+      
+      writeContract({
+        address: USD1_CONTRACT,
+        abi: ERC20_ABI,
+        functionName: "transfer",
+        args: [GIGGLE_FUND_WALLET, amount],
+        account: address,
+        chain: bsc,
+      });
+      
+      // Wait for transaction confirmation
+      toast.info("Waiting for transaction confirmation...");
+      
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error("Payment failed");
+      setIsLoading(false);
+    }
+  };
+  
+  // Handle transaction success
+  const processChat = async () => {
+    if (!isConfirmed || !hash) return;
+    
+    try {
+      setTxHash(hash);
+      toast.success("Payment verified: 0.0001 USD1 sent to Giggle Academy Fund!");
       
       // Call actual AI functions
       if (useCase === "chat") {
@@ -61,17 +111,21 @@ export const Demo = ({
         setResult(aiResponse);
         toast.success("Chat completed");
       } else {
-        // Image generation and AI Agent coming soon
         setResult(`${useCase === "image" ? "Image generation" : "AI Agent deployment"} coming soon - stay tuned!`);
         toast.info("Feature coming soon");
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error("Error - payment will be refunded");
+      toast.error("Chat error - your payment is recorded");
     } finally {
       setIsLoading(false);
     }
   };
+  
+  // Effect to handle transaction confirmation
+  if (isConfirmed && isLoading && !result) {
+    processChat();
+  }
   return <section className="py-20 px-4 border-t border-border" id="demo">
       <div className="container mx-auto max-w-3xl">
         <div className="text-center mb-12">
@@ -134,11 +188,17 @@ export const Demo = ({
               </div>
             </div>
 
-              <Button type="submit" size="lg" className="w-full" disabled={isLoading || !isWalletConnected || useCase !== "chat"}>
-              {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : useCase !== "chat" ? "[COMING_SOON]" : isLoading ? <>
+              <Button type="submit" size="lg" className="w-full" disabled={isLoading || isWriting || isConfirming || !isWalletConnected || useCase !== "chat"}>
+              {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : useCase !== "chat" ? "[COMING_SOON]" : isWriting ? <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  [PROCESSING...]
-                </> : "[PAY_AND_CHAT]"}
+                  [SIGN_TRANSACTION...]
+                </> : isConfirming ? <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  [CONFIRMING_PAYMENT...]
+                </> : isLoading ? <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  [PROCESSING_CHAT...]
+                </> : "[PAY_0.0001_USD1_AND_CHAT]"}
             </Button>
           </form>
 
