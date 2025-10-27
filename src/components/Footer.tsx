@@ -1,18 +1,13 @@
 import { Button } from "@/components/ui/button";
-
 export const Footer = () => {
-  return (
-    <footer className="py-20 px-4 border-t border-border">
+  return <footer className="py-20 px-4 border-t border-border">
       <div className="container mx-auto max-w-6xl">
         <div className="grid md:grid-cols-2 gap-12 mb-12">
           <div>
             <h3 className="text-2xl font-mono font-bold uppercase mb-4">
               BUILD_ON_X402
             </h3>
-            <p className="text-sm font-mono text-muted-foreground mb-6">
-              Join the AI payment revolution. Deploy autonomous agents.
-              Launch $GROKPAY Q1/2026.
-            </p>
+            <p className="text-sm font-mono text-muted-foreground mb-6">Join the AI payment revolution. Deploy autonomous agents. Launch $GPAY Q1/2026.</p>
           </div>
 
           <div className="grid grid-cols-2 gap-8">
@@ -73,6 +68,5 @@ export const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
