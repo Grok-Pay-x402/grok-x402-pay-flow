@@ -203,7 +203,7 @@ export const Demo = ({
               <div className="text-xs font-mono mb-2">
                 &gt; payment_verified
               </div>
-              <a href={`https://testnet.bscscan.com/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors">
+              <a href={`https://bscscan.com/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-muted-foreground hover:text-foreground transition-colors">
                 view_on_bscscan: {txHash.slice(0, 16)}...
               </a>
             </div>}
