@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.grok-chat]
 verify_jwt = false
+
+[functions.grok-image]
+verify_jwt = false

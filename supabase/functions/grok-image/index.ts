@@ -13,11 +13,11 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, stream = false } = await req.json();
+    const { prompt } = await req.json();
     
-    if (!messages || !Array.isArray(messages)) {
+    if (!prompt) {
       return new Response(
-        JSON.stringify({ error: 'Messages array is required' }),
+        JSON.stringify({ error: 'Prompt is required' }),
         { 
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -30,8 +30,9 @@ serve(async (req) => {
       throw new Error('OPENROUTER_API_KEY is not configured');
     }
 
-    console.log('Calling Grok via OpenRouter...');
+    console.log('Generating image with Grok via OpenRouter...');
 
+    // Use chat completions API with image generation prompt
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -42,8 +43,13 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'x-ai/grok-4-fast',
-        messages: messages,
-        stream: stream,
+        messages: [
+          {
+            role: 'user',
+            content: `Generate an image: ${prompt}. Return only the image URL or base64 data.`
+          }
+        ],
+        max_tokens: 4096,
       }),
     });
 
@@ -80,29 +86,24 @@ serve(async (req) => {
       );
     }
 
-    // If streaming is requested, return the stream
-    if (stream) {
-      return new Response(response.body, {
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'text/event-stream',
-        },
-      });
-    }
-
-    // Otherwise, return the full response
     const data = await response.json();
-    console.log('Grok response received successfully');
+    console.log('Grok image generation response received');
+
+    // Extract the image from the response
+    const imageContent = data.choices?.[0]?.message?.content;
 
     return new Response(
-      JSON.stringify(data),
+      JSON.stringify({ 
+        image: imageContent,
+        raw: data 
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
 
   } catch (error) {
-    console.error('Error in grok-chat function:', error);
+    console.error('Error in grok-image function:', error);
     return new Response(
       JSON.stringify({ 
         error: error instanceof Error ? error.message : 'Unknown error' 
