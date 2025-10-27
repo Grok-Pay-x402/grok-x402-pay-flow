@@ -4,6 +4,7 @@ import { UseCases } from "@/components/UseCases";
 import { Demo } from "@/components/Demo";
 import { Footer } from "@/components/Footer";
 import { WalletConnect } from "@/components/WalletConnect";
+import { GrokChat } from "@/components/GrokChat";
 
 const Index = () => {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -24,6 +25,7 @@ const Index = () => {
       <Hero onConnectWallet={handleConnectWallet} />
       <UseCases onTryDemo={handleTryDemo} />
       <Demo isWalletConnected={isWalletConnected} />
+      <GrokChat />
       <Footer />
     </div>
   );
