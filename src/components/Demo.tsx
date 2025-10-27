@@ -5,6 +5,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+const USD1_CONTRACT = "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d";
+const GIGGLE_FUND_WALLET = "0xc7f501d25ea088aefca8b4b3ebd936aae12bf4a4";
+
 export const Demo = ({
   isWalletConnected
 }: {
@@ -78,6 +81,14 @@ export const Demo = ({
           <p className="text-sm font-mono text-muted-foreground">
             &gt; test_x402_payment_flow
           </p>
+          <div className="mt-6 border border-primary/30 bg-primary/5 p-4 max-w-2xl mx-auto">
+            <p className="text-xs font-mono text-primary font-bold mb-2">
+              🎓 ALL DEMO PAYMENTS GO TO GIGGLE ACADEMY FUND 🎓
+            </p>
+            <p className="text-xs font-mono text-muted-foreground">
+              Fund Wallet: {GIGGLE_FUND_WALLET.slice(0, 10)}...{GIGGLE_FUND_WALLET.slice(-8)}
+            </p>
+          </div>
         </div>
 
         <div className="border border-border p-8">
@@ -108,6 +119,19 @@ export const Demo = ({
             <div className="flex justify-between items-center p-4 bg-secondary border border-border">
               <span className="text-xs font-mono text-muted-foreground">COST:</span>
               <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} USD1</span>
+            </div>
+
+            <div className="p-4 border border-primary/30 bg-primary/5">
+              <div className="text-xs font-mono mb-2">
+                <span className="text-muted-foreground">USD1 Contract:</span>
+                <br />
+                <code className="text-xs break-all">{USD1_CONTRACT}</code>
+              </div>
+              <div className="text-xs font-mono">
+                <span className="text-muted-foreground">Giggle Fund:</span>
+                <br />
+                <code className="text-xs break-all">{GIGGLE_FUND_WALLET}</code>
+              </div>
             </div>
 
               <Button type="submit" size="lg" className="w-full" disabled={isLoading || !isWalletConnected || useCase !== "chat"}>
@@ -156,6 +180,15 @@ export const Demo = ({
                 &gt; connect_bnb_wallet_to_test_on_testnet
               </p>
             </div>}
+          
+          <div className="mt-6 p-4 border border-primary/30 bg-primary/5 text-center">
+            <p className="text-xs font-mono font-bold text-primary mb-2">
+              💚 SUPPORTING EDUCATION 💚
+            </p>
+            <p className="text-xs font-mono text-muted-foreground">
+              Every demo chat contributes 0.0001 USD1 to Giggle Academy Fund
+            </p>
+          </div>
         </div>
 
         <div className="mt-12 text-center">
