@@ -12,30 +12,41 @@ const USD1_CONTRACT = "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d" as `0x${strin
 const GIGGLE_FUND_WALLET = "0xc7f501d25ea088aefca8b4b3ebd936aae12bf4a4" as `0x${string}`;
 
 // ERC20 Transfer ABI
-const ERC20_ABI = [
-  {
-    name: "transfer",
-    type: "function",
-    stateMutability: "nonpayable",
-    inputs: [
-      { name: "to", type: "address" },
-      { name: "amount", type: "uint256" }
-    ],
-    outputs: [{ name: "", type: "bool" }]
-  }
-] as const;
-
+const ERC20_ABI = [{
+  name: "transfer",
+  type: "function",
+  stateMutability: "nonpayable",
+  inputs: [{
+    name: "to",
+    type: "address"
+  }, {
+    name: "amount",
+    type: "uint256"
+  }],
+  outputs: [{
+    name: "",
+    type: "bool"
+  }]
+}] as const;
 export const Demo = ({
   isWalletConnected
 }: {
   isWalletConnected: boolean;
 }) => {
-  const { address } = useAccount();
-  const { writeContract, data: hash, isPending: isWriting } = useWriteContract();
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
-    hash,
+  const {
+    address
+  } = useAccount();
+  const {
+    writeContract,
+    data: hash,
+    isPending: isWriting
+  } = useWriteContract();
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed
+  } = useWaitForTransactionReceipt({
+    hash
   });
-  
   const [prompt, setPrompt] = useState("");
   const [useCase, setUseCase] = useState("chat");
   const [isLoading, setIsLoading] = useState(false);
@@ -57,37 +68,33 @@ export const Demo = ({
       toast.error("Please enter a prompt");
       return;
     }
-    
     setIsLoading(true);
     setResult(null);
     setImageUrl(null);
     setTxHash(null);
-    
     try {
       // Step 1: Send payment transaction
       toast.info("Sign the transaction to send 0.0001 USD1 to Giggle Academy Fund...");
-      
       const amount = parseUnits("0.0001", 18); // Assuming 18 decimals for USD1
-      
+
       writeContract({
         address: USD1_CONTRACT,
         abi: ERC20_ABI,
         functionName: "transfer",
         args: [GIGGLE_FUND_WALLET, amount],
         account: address,
-        chain: bsc,
+        chain: bsc
       });
-      
+
       // Wait for transaction confirmation
       toast.info("Waiting for transaction confirmation...");
-      
     } catch (error) {
       console.error('Error:', error);
       toast.error("Payment failed");
       setIsLoading(false);
     }
   };
-  
+
   // Effect to handle transaction confirmation
   useEffect(() => {
     if (isConfirmed && isLoading && !result && hash) {
@@ -95,17 +102,20 @@ export const Demo = ({
         try {
           setTxHash(hash);
           toast.success("Payment verified: 0.0001 USD1 sent to Giggle Academy Fund!");
-          
+
           // Call actual AI functions
           if (useCase === "chat") {
-            const { data, error } = await supabase.functions.invoke('grok-chat', {
-              body: { 
-                messages: [
-                  { role: 'user', content: prompt }
-                ]
+            const {
+              data,
+              error
+            } = await supabase.functions.invoke('grok-chat', {
+              body: {
+                messages: [{
+                  role: 'user',
+                  content: prompt
+                }]
               }
             });
-            
             if (error) throw error;
             const aiResponse = data.choices?.[0]?.message?.content || "No response";
             setResult(aiResponse);
@@ -121,7 +131,6 @@ export const Demo = ({
           setIsLoading(false);
         }
       };
-      
       processChat();
     }
   }, [isConfirmed, isLoading, result, hash, useCase, prompt]);
@@ -174,18 +183,7 @@ export const Demo = ({
               <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} USD1</span>
             </div>
 
-            <div className="p-4 border border-primary/30 bg-primary/5">
-              <div className="text-xs font-mono mb-2">
-                <span className="text-muted-foreground">USD1 Contract:</span>
-                <br />
-                <code className="text-xs break-all">{USD1_CONTRACT}</code>
-              </div>
-              <div className="text-xs font-mono">
-                <span className="text-muted-foreground">Giggle Fund:</span>
-                <br />
-                <code className="text-xs break-all">{GIGGLE_FUND_WALLET}</code>
-              </div>
-            </div>
+            
 
               <Button type="submit" size="lg" className="w-full" disabled={isLoading || isWriting || isConfirming || !isWalletConnected || useCase !== "chat"}>
               {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : useCase !== "chat" ? "[COMING_SOON]" : isWriting ? <>
@@ -214,18 +212,10 @@ export const Demo = ({
               <div className="text-xs font-mono text-muted-foreground mb-4">
                 &gt; result:
               </div>
-              {imageUrl ? (
-                <div className="mb-6">
-                  <img 
-                    src={imageUrl} 
-                    alt="Generated image" 
-                    className="w-full rounded border border-border"
-                  />
+              {imageUrl ? <div className="mb-6">
+                  <img src={imageUrl} alt="Generated image" className="w-full rounded border border-border" />
                   <p className="text-sm font-mono mt-2">{result}</p>
-                </div>
-              ) : (
-                <p className="text-sm font-mono mb-6">{result}</p>
-              )}
+                </div> : <p className="text-sm font-mono mb-6">{result}</p>}
               
               <Button variant="outline" className="w-full" onClick={() => {
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent("Just tested GrokPay x402. Pay 0.0001 USD1 for AI with zero subscriptions. #x402 #GrokPay #Web3AI")}`, '_blank');
