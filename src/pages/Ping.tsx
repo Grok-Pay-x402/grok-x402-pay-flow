@@ -1,58 +1,22 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
 
 const Ping = () => {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    const fetchPing = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ping`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }
-        );
-        
-        if (!response.ok) throw new Error('Failed to fetch');
-        
-        const jsonData = await response.json();
-        setData(jsonData);
-      } catch (error) {
-        console.error('Error fetching ping:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPing();
+    // Redirect to edge function endpoint immediately
+    const edgeFunctionUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ping`;
+    window.location.replace(edgeFunctionUrl);
   }, []);
 
-  // Return JSON response directly
-  if (loading) {
-    return null;
-  }
-
-  // Set content type to JSON
-  if (data) {
-    return (
-      <pre style={{ 
-        margin: 0, 
-        padding: '20px', 
-        fontFamily: 'monospace',
-        whiteSpace: 'pre-wrap',
-        wordWrap: 'break-word'
-      }}>
-        {JSON.stringify(data, null, 2)}
-      </pre>
-    );
-  }
-
-  return null;
+  return (
+    <div style={{ 
+      margin: 0, 
+      padding: '20px', 
+      fontFamily: 'monospace',
+      textAlign: 'center'
+    }}>
+      Redirecting to ping endpoint...
+    </div>
+  );
 };
 
 export default Ping;
