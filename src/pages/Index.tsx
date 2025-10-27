@@ -1,12 +1,30 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Hero } from "@/components/Hero";
+import { UseCases } from "@/components/UseCases";
+import { Demo } from "@/components/Demo";
+import { Footer } from "@/components/Footer";
+import { WalletConnect } from "@/components/WalletConnect";
 
 const Index = () => {
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+
+  const handleConnectWallet = () => {
+    // This will be triggered from Hero CTA, scrolls to wallet connect
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleTryDemo = (useCase: string) => {
+    // Scroll to demo section
+    document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen">
+      <WalletConnect onConnect={setIsWalletConnected} />
+      <Hero onConnectWallet={handleConnectWallet} />
+      <UseCases onTryDemo={handleTryDemo} />
+      <Demo isWalletConnected={isWalletConnected} />
+      <Footer />
     </div>
   );
 };
