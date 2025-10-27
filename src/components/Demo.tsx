@@ -57,28 +57,10 @@ export const Demo = ({
         const aiResponse = data.choices?.[0]?.message?.content || "No response";
         setResult(aiResponse);
         toast.success("Chat completed");
-      } else if (useCase === "image") {
-        const { data, error } = await supabase.functions.invoke('generate-image', {
-          body: { prompt }
-        });
-        
-        if (error) throw error;
-        
-        // Extract image URL from response
-        const imageContent = data.choices?.[0]?.message?.content;
-        if (imageContent) {
-          // Parse the image URL from markdown format or direct URL
-          const urlMatch = imageContent.match(/https?:\/\/[^\s\)]+/);
-          if (urlMatch) {
-            setImageUrl(urlMatch[0]);
-            setResult("Image generated successfully");
-          } else {
-            setResult("Image generated but URL not found in response");
-          }
-        }
-        toast.success("Image generated");
       } else {
-        setResult("Agent deployment coming soon - will automatically pay for API calls and analyze market data 24/7");
+        // Image generation and AI Agent coming soon
+        setResult(`${useCase === "image" ? "Image generation" : "AI Agent deployment"} coming soon - stay tuned!`);
+        toast.info("Feature coming soon");
       }
     } catch (error) {
       console.error('Error:', error);
@@ -128,11 +110,11 @@ export const Demo = ({
               <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} USDC</span>
             </div>
 
-            <Button type="submit" size="lg" className="w-full" disabled={isLoading || !isWalletConnected}>
-              {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : isLoading ? <>
+              <Button type="submit" size="lg" className="w-full" disabled={isLoading || !isWalletConnected || useCase !== "chat"}>
+              {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : useCase !== "chat" ? "[COMING_SOON]" : isLoading ? <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   [PROCESSING...]
-                </> : "[PAY_AND_GENERATE]"}
+                </> : "[PAY_AND_CHAT]"}
             </Button>
           </form>
 
