@@ -1,6 +1,8 @@
-# Welcome to your Lovable project
+# GROKPAY_PROXY - x402 Payment System
 
 ## Project info
+
+**Built on BNB Chain** - Leveraging x402 protocol for micro-payments to AI services
 
 **URL**: https://lovable.dev/projects/901086bf-552c-4423-9722-63329a2d5b78
 
@@ -54,11 +56,14 @@ npm run dev
 
 This project is built with:
 
+- **BNB Chain** - Blockchain infrastructure for payments
+- **x402 Protocol** - HTTP 402 payment standard for AI services
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- WalletConnect - Web3 wallet integration
 
 ## How can I deploy this project?
 
