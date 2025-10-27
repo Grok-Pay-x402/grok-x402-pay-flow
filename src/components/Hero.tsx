@@ -1,24 +1,40 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import logo from "@/assets/grokpay-logo.jpg";
-
-export const Hero = ({ onConnectWallet }: { onConnectWallet: () => void }) => {
-  const [timeLeft, setTimeLeft] = useState({ days: 7, hours: 0, minutes: 0 });
-
+export const Hero = ({
+  onConnectWallet
+}: {
+  onConnectWallet: () => void;
+}) => {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 7,
+    hours: 0,
+    minutes: 0
+  });
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1 };
-        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59 };
-        if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, minutes: 59 };
+        if (prev.minutes > 0) return {
+          ...prev,
+          minutes: prev.minutes - 1
+        };
+        if (prev.hours > 0) return {
+          ...prev,
+          hours: prev.hours - 1,
+          minutes: 59
+        };
+        if (prev.days > 0) return {
+          ...prev,
+          days: prev.days - 1,
+          hours: 23,
+          minutes: 59
+        };
         return prev;
       });
     }, 60000);
     return () => clearInterval(timer);
   }, []);
-
-  return (
-    <section className="min-h-screen flex items-center justify-center px-4 py-20">
+  return <section className="min-h-screen flex items-center justify-center px-4 py-20">
       <div className="container max-w-4xl mx-auto">
         <div className="text-center space-y-8">
           {/* Logo */}
@@ -46,59 +62,20 @@ export const Hero = ({ onConnectWallet }: { onConnectWallet: () => void }) => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto py-8">
-            <div className="border border-border p-4">
-              <div className="text-2xl font-mono font-bold">1K+</div>
-              <div className="text-xs font-mono text-muted-foreground mt-1">TX_TODAY</div>
-            </div>
-            <div className="border border-border p-4">
-              <div className="text-2xl font-mono font-bold">+93%</div>
-              <div className="text-xs font-mono text-muted-foreground mt-1">GROWTH_YOY</div>
-            </div>
-            <div className="border border-border p-4">
-              <div className="text-2xl font-mono font-bold">5K+</div>
-              <div className="text-xs font-mono text-muted-foreground mt-1">BETA_USERS</div>
-            </div>
-          </div>
+          
 
           {/* CTA */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              onClick={onConnectWallet}
-              className="px-8 py-6 h-auto"
-            >
+            <Button size="lg" onClick={onConnectWallet} className="px-8 py-6 h-auto">
               [CONNECT_WALLET]
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="px-8 py-6 h-auto"
-            >
+            <Button size="lg" variant="outline" className="px-8 py-6 h-auto">
               [READ_DOCS]
             </Button>
           </div>
 
           {/* Countdown */}
-          <div className="border border-border p-6 inline-block">
-            <div className="text-xs font-mono text-muted-foreground mb-3">BETA_ENDS:</div>
-            <div className="flex gap-4 text-2xl font-mono font-bold">
-              <div>
-                <div>{timeLeft.days}</div>
-                <div className="text-xs text-muted-foreground">D</div>
-              </div>
-              <div>:</div>
-              <div>
-                <div>{String(timeLeft.hours).padStart(2, '0')}</div>
-                <div className="text-xs text-muted-foreground">H</div>
-              </div>
-              <div>:</div>
-              <div>
-                <div>{String(timeLeft.minutes).padStart(2, '0')}</div>
-                <div className="text-xs text-muted-foreground">M</div>
-              </div>
-            </div>
-          </div>
+          
 
           {/* Footer text */}
           <p className="text-xs font-mono text-muted-foreground pt-4">
@@ -106,6 +83,5 @@ export const Hero = ({ onConnectWallet }: { onConnectWallet: () => void }) => {
           </p>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
