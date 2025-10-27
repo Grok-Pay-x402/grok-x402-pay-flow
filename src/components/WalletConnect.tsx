@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Wallet, LogOut } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
 
 export const WalletConnect = ({ 
   onConnect 
@@ -14,7 +12,6 @@ export const WalletConnect = ({
   const [balance, setBalance] = useState("10.00");
 
   const handleConnect = async () => {
-    // Simulate wallet connection (in production, use WalletConnect/Web3Modal)
     toast.loading("Connecting to BNB Chain...");
     
     setTimeout(() => {
@@ -23,9 +20,7 @@ export const WalletConnect = ({
       setIsConnected(true);
       onConnect(true);
       
-      toast.success("Wallet Connected!", {
-        description: "BNB Testnet - Ready to test x402 payments 🚀",
-      });
+      toast.success("Wallet connected - BNB Testnet ready");
     }, 1500);
   };
 
@@ -33,81 +28,49 @@ export const WalletConnect = ({
     setIsConnected(false);
     setAddress("");
     onConnect(false);
-    toast.info("Wallet Disconnected");
+    toast.info("Wallet disconnected");
   };
 
   return (
     <div className="fixed top-4 right-4 z-50">
-      <AnimatePresence mode="wait">
-        {!isConnected ? (
-          <motion.div
-            key="connect"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-          >
-            <Button 
-              variant="hero" 
-              onClick={handleConnect}
-              className="shadow-glow-primary"
+      {!isConnected ? (
+        <Button onClick={handleConnect}>
+          [CONNECT_WALLET]
+        </Button>
+      ) : (
+        <div className="border border-border p-4 bg-background min-w-64">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-foreground" />
+              <span className="text-xs font-mono uppercase">Connected</span>
+            </div>
+            <button
+              onClick={handleDisconnect}
+              className="text-xs font-mono hover:text-muted-foreground transition-colors"
             >
-              <Wallet className="w-5 h-5" />
-              Connect Wallet
-            </Button>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="connected"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="glass-card p-4 rounded-xl border border-accent/30 min-w-64"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-                <span className="text-sm font-medium text-accent">Connected</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleDisconnect}
-                className="h-8 px-2 hover:text-destructive"
-              >
-                <LogOut className="w-4 h-4" />
-              </Button>
+              [X]
+            </button>
+          </div>
+
+          <div className="space-y-2 text-xs font-mono">
+            <div>
+              <div className="text-muted-foreground mb-1">ADDRESS:</div>
+              <div>{address.slice(0, 6)}...{address.slice(-4)}</div>
             </div>
 
-            <div className="space-y-2">
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Address</p>
-                <p className="text-sm font-mono">
-                  {address.slice(0, 6)}...{address.slice(-4)}
-                </p>
-              </div>
+            <div>
+              <div className="text-muted-foreground mb-1">BALANCE:</div>
+              <div className="text-sm font-bold">{balance} USDC</div>
+            </div>
 
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">Balance (Testnet)</p>
-                <p className="text-lg font-bold text-accent">{balance} USDC</p>
-              </div>
-
-              <div className="pt-2 border-t border-border">
-                <p className="text-xs text-muted-foreground">
-                  BNB Testnet • 
-                  <a 
-                    href="https://testnet.bnbchain.org/faucet-smart"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent hover:underline ml-1"
-                  >
-                    Get Testnet USDC
-                  </a>
-                </p>
+            <div className="pt-2 border-t border-border">
+              <div className="text-muted-foreground">
+                BNB_TESTNET
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
