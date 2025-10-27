@@ -65,7 +65,7 @@ export const Demo = ({
     
     try {
       // Step 1: Send payment transaction
-      toast.info("Sign the transaction to send 0.0001 USD1 to Giggle Academy Fund...");
+      toast.info("Sign the transaction to send 0.0001 $GPAY to Giggle Academy Fund...");
       
       const amount = parseUnits("0.0001", 18); // Assuming 18 decimals for USD1
       
@@ -94,7 +94,7 @@ export const Demo = ({
       const processChat = async () => {
         try {
           setTxHash(hash);
-          toast.success("Payment verified: 0.0001 USD1 sent to Giggle Academy Fund!");
+          toast.success("Payment verified: 0.0001 $GPAY sent to Giggle Academy Fund!");
           
           // Call actual AI functions
           if (useCase === "chat") {
@@ -155,9 +155,9 @@ export const Demo = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="chat">AI_CHAT - {costs.chat} USD1</SelectItem>
-                  <SelectItem value="image">IMAGE_GEN - {costs.image} USD1</SelectItem>
-                  <SelectItem value="agent">AI_AGENT - {costs.agent} USD1</SelectItem>
+                  <SelectItem value="chat">AI_CHAT - {costs.chat} $GPAY</SelectItem>
+                  <SelectItem value="image">IMAGE_GEN - {costs.image} $GPAY</SelectItem>
+                  <SelectItem value="agent">AI_AGENT - {costs.agent} $GPAY</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -171,12 +171,12 @@ export const Demo = ({
 
             <div className="flex justify-between items-center p-4 bg-secondary border border-border">
               <span className="text-xs font-mono text-muted-foreground">COST:</span>
-              <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} USD1</span>
+              <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} $GPAY</span>
             </div>
 
             <div className="p-4 border border-primary/30 bg-primary/5">
               <div className="text-xs font-mono mb-2">
-                <span className="text-muted-foreground">USD1 Contract:</span>
+                <span className="text-muted-foreground">$GPAY Contract:</span>
                 <br />
                 <code className="text-xs break-all">{USD1_CONTRACT}</code>
               </div>
@@ -197,7 +197,7 @@ export const Demo = ({
                 </> : isLoading ? <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   [PROCESSING_CHAT...]
-                </> : "[PAY_0.0001_USD1_AND_CHAT]"}
+                </> : "[PAY_0.0001_$GPAY_AND_CHAT]"}
             </Button>
           </form>
 
@@ -245,7 +245,7 @@ export const Demo = ({
               💚 SUPPORTING EDUCATION 💚
             </p>
             <p className="text-xs font-mono text-muted-foreground">
-              Every demo chat contributes 0.0001 USD1 to Giggle Academy Fund
+              Every demo chat contributes 0.0001 $GPAY to Giggle Academy Fund
             </p>
           </div>
         </div>
