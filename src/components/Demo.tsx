@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -88,44 +88,43 @@ export const Demo = ({
     }
   };
   
-  // Handle transaction success
-  const processChat = async () => {
-    if (!isConfirmed || !hash) return;
-    
-    try {
-      setTxHash(hash);
-      toast.success("Payment verified: 0.0001 USD1 sent to Giggle Academy Fund!");
-      
-      // Call actual AI functions
-      if (useCase === "chat") {
-        const { data, error } = await supabase.functions.invoke('grok-chat', {
-          body: { 
-            messages: [
-              { role: 'user', content: prompt }
-            ]
-          }
-        });
-        
-        if (error) throw error;
-        const aiResponse = data.choices?.[0]?.message?.content || "No response";
-        setResult(aiResponse);
-        toast.success("Chat completed");
-      } else {
-        setResult(`${useCase === "image" ? "Image generation" : "AI Agent deployment"} coming soon - stay tuned!`);
-        toast.info("Feature coming soon");
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error("Chat error - your payment is recorded");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
   // Effect to handle transaction confirmation
-  if (isConfirmed && isLoading && !result) {
-    processChat();
-  }
+  useEffect(() => {
+    if (isConfirmed && isLoading && !result && hash) {
+      const processChat = async () => {
+        try {
+          setTxHash(hash);
+          toast.success("Payment verified: 0.0001 USD1 sent to Giggle Academy Fund!");
+          
+          // Call actual AI functions
+          if (useCase === "chat") {
+            const { data, error } = await supabase.functions.invoke('grok-chat', {
+              body: { 
+                messages: [
+                  { role: 'user', content: prompt }
+                ]
+              }
+            });
+            
+            if (error) throw error;
+            const aiResponse = data.choices?.[0]?.message?.content || "No response";
+            setResult(aiResponse);
+            toast.success("Chat completed");
+          } else {
+            setResult(`${useCase === "image" ? "Image generation" : "AI Agent deployment"} coming soon - stay tuned!`);
+            toast.info("Feature coming soon");
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          toast.error("Chat error - your payment is recorded");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      processChat();
+    }
+  }, [isConfirmed, isLoading, result, hash, useCase, prompt]);
   return <section className="py-20 px-4 border-t border-border" id="demo">
       <div className="container mx-auto max-w-3xl">
         <div className="text-center mb-12">
