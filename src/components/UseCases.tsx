@@ -57,13 +57,9 @@ export const UseCases = ({ onTryDemo }: { onTryDemo: (useCase: string) => void }
                   &gt; {useCase.example}
                 </div>
 
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={() => onTryDemo(useCase.title)}
-                >
-                  [TRY_NOW]
-                </Button>
+                <div className="w-full py-2 text-center border border-border">
+                  <span className="text-xs font-mono text-muted-foreground">[COMING_SOON]</span>
+                </div>
               </div>
             </div>
           ))}
