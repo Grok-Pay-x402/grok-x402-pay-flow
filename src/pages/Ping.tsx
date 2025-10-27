@@ -8,11 +8,20 @@ const Ping = () => {
   useEffect(() => {
     const fetchPing = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('ping');
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ping`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
         
-        if (error) throw error;
+        if (!response.ok) throw new Error('Failed to fetch');
         
-        setData(data);
+        const jsonData = await response.json();
+        setData(jsonData);
       } catch (error) {
         console.error('Error fetching ping:', error);
       } finally {
