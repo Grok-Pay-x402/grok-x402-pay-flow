@@ -52,7 +52,7 @@ export const Hero = ({
           {/* Main Heading */}
           <h1 className="text-4xl md:text-6xl font-mono font-bold uppercase tracking-tight">
             GROK AI<br />
-            0.01 USDC/CHAT
+            0.0001 USD/CHAT
           </h1>
 
           <div className="border-t border-b border-foreground py-4">
