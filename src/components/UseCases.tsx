@@ -4,13 +4,13 @@ const useCases = [
   {
     title: "AI_CHAT",
     description: "Ask Grok about DeFi, crypto, any question",
-    price: "0.01 USDC",
+    price: "0.0001 USDC",
     example: "explain_bitcoin_halving",
   },
   {
     title: "IMAGE_GEN",
     description: "Generate unique AI images with Grok models",
-    price: "0.05 USDC",
+    price: "0.0003 USDC",
     example: "futuristic_city_flying_cars",
   },
   {
@@ -57,7 +57,7 @@ export const UseCases = ({ onTryDemo }: { onTryDemo: (useCase: string) => void }
                   &gt; {useCase.example}
                 </div>
 
-                {useCase.title === "AI_AGENT" ? (
+                {useCase.title === "AI_AGENT" || useCase.title === "IMAGE_GEN" ? (
                   <div className="w-full py-2 text-center border border-border">
                     <span className="text-xs font-mono text-muted-foreground">[COMING_SOON]</span>
                   </div>
