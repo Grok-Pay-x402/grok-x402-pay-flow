@@ -93,7 +93,7 @@ Deno.serve(async (req) => {
     console.log('Ping endpoint called successfully');
 
     return new Response(JSON.stringify(x402Config), {
-      status: 200,
+      status: 402,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
