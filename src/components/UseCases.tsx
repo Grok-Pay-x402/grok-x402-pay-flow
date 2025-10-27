@@ -4,13 +4,13 @@ const useCases = [
   {
     title: "AI_CHAT",
     description: "Ask Grok about DeFi, crypto, any question",
-    price: "0.0001 USDC",
+    price: "0.0001 USD1",
     example: "explain_bitcoin_halving",
   },
   {
     title: "IMAGE_GEN",
     description: "Generate unique AI images with Grok models",
-    price: "0.0003 USDC",
+    price: "0.0003 USD1",
     example: "futuristic_city_flying_cars",
   },
   {

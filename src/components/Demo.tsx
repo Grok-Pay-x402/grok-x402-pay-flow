@@ -17,8 +17,8 @@ export const Demo = ({
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
   const costs = {
-    chat: "0.01",
-    image: "0.05",
+    chat: "0.0001",
+    image: "0.0003",
     agent: "0.03"
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,7 +41,7 @@ export const Demo = ({
       await new Promise(resolve => setTimeout(resolve, 1500));
       const mockTxHash = `0x${Math.random().toString(16).substr(2, 64)}`;
       setTxHash(mockTxHash);
-      toast.success(`Payment verified: ${costs[useCase as keyof typeof costs]} USDC`);
+      toast.success(`Payment verified: ${costs[useCase as keyof typeof costs]} USD1`);
       
       // Call actual AI functions
       if (useCase === "chat") {
@@ -91,9 +91,9 @@ export const Demo = ({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="chat">AI_CHAT - {costs.chat} USDC</SelectItem>
-                  <SelectItem value="image">IMAGE_GEN - {costs.image} USDC</SelectItem>
-                  <SelectItem value="agent">AI_AGENT - {costs.agent} USDC</SelectItem>
+                  <SelectItem value="chat">AI_CHAT - {costs.chat} USD1</SelectItem>
+                  <SelectItem value="image">IMAGE_GEN - {costs.image} USD1</SelectItem>
+                  <SelectItem value="agent">AI_AGENT - {costs.agent} USD1</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -107,7 +107,7 @@ export const Demo = ({
 
             <div className="flex justify-between items-center p-4 bg-secondary border border-border">
               <span className="text-xs font-mono text-muted-foreground">COST:</span>
-              <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} USDC</span>
+              <span className="text-sm font-mono font-bold">{costs[useCase as keyof typeof costs]} USD1</span>
             </div>
 
               <Button type="submit" size="lg" className="w-full" disabled={isLoading || !isWalletConnected || useCase !== "chat"}>
@@ -145,7 +145,7 @@ export const Demo = ({
               )}
               
               <Button variant="outline" className="w-full" onClick={() => {
-            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent("Just tested GrokPay x402. Pay 0.01 USDC for AI with zero subscriptions. #x402 #GrokPay #Web3AI")}`, '_blank');
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent("Just tested GrokPay x402. Pay 0.0001 USD1 for AI with zero subscriptions. #x402 #GrokPay #Web3AI")}`, '_blank');
           }}>
                 [SHARE_ON_X]
               </Button>
