@@ -1,0 +1,4 @@
+project_id = "snmiveqktikbfayedpxc"
+
+[functions.grok-chat]
+verify_jwt = false
