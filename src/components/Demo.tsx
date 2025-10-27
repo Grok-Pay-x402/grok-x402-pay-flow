@@ -4,6 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 export const Demo = ({
   isWalletConnected
 }: {
@@ -13,6 +14,7 @@ export const Demo = ({
   const [useCase, setUseCase] = useState("chat");
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
   const costs = {
     chat: "0.01",
@@ -31,22 +33,55 @@ export const Demo = ({
     }
     setIsLoading(true);
     setResult(null);
+    setImageUrl(null);
     setTxHash(null);
+    
     try {
+      // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 1500));
       const mockTxHash = `0x${Math.random().toString(16).substr(2, 64)}`;
       setTxHash(mockTxHash);
       toast.success(`Payment verified: ${costs[useCase as keyof typeof costs]} USDC`);
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Call actual AI functions
       if (useCase === "chat") {
-        setResult("Bitcoin halving is an event where mining rewards are cut in half, reducing new supply. This historically increases scarcity and can drive price action.");
+        const { data, error } = await supabase.functions.invoke('grok-chat', {
+          body: { 
+            messages: [
+              { role: 'user', content: prompt }
+            ]
+          }
+        });
+        
+        if (error) throw error;
+        const aiResponse = data.choices?.[0]?.message?.content || "No response";
+        setResult(aiResponse);
+        toast.success("Chat completed");
       } else if (useCase === "image") {
-        setResult("Image generated successfully (production: actual image would display here)");
+        const { data, error } = await supabase.functions.invoke('generate-image', {
+          body: { prompt }
+        });
+        
+        if (error) throw error;
+        
+        // Extract image URL from response
+        const imageContent = data.choices?.[0]?.message?.content;
+        if (imageContent) {
+          // Parse the image URL from markdown format or direct URL
+          const urlMatch = imageContent.match(/https?:\/\/[^\s\)]+/);
+          if (urlMatch) {
+            setImageUrl(urlMatch[0]);
+            setResult("Image generated successfully");
+          } else {
+            setResult("Image generated but URL not found in response");
+          }
+        }
+        toast.success("Image generated");
       } else {
-        setResult("Agent deployed - will automatically pay for API calls and analyze market data 24/7");
+        setResult("Agent deployment coming soon - will automatically pay for API calls and analyze market data 24/7");
       }
-      toast.success("Request completed");
     } catch (error) {
+      console.error('Error:', error);
       toast.error("Error - payment will be refunded");
     } finally {
       setIsLoading(false);
@@ -114,7 +149,18 @@ export const Demo = ({
               <div className="text-xs font-mono text-muted-foreground mb-4">
                 &gt; result:
               </div>
-              <p className="text-sm font-mono mb-6">{result}</p>
+              {imageUrl ? (
+                <div className="mb-6">
+                  <img 
+                    src={imageUrl} 
+                    alt="Generated image" 
+                    className="w-full rounded border border-border"
+                  />
+                  <p className="text-sm font-mono mt-2">{result}</p>
+                </div>
+              ) : (
+                <p className="text-sm font-mono mb-6">{result}</p>
+              )}
               
               <Button variant="outline" className="w-full" onClick={() => {
             window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent("Just tested GrokPay x402. Pay 0.01 USDC for AI with zero subscriptions. #x402 #GrokPay #Web3AI")}`, '_blank');
