@@ -1,5 +1,7 @@
+import { useAccount, useDisconnect, useBalance } from "wagmi";
+import { useWeb3Modal } from "@web3modal/wagmi/react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 import logo from "@/assets/grokpay-logo.jpg";
 
@@ -8,34 +10,29 @@ export const WalletConnect = ({
 }: { 
   onConnect: (connected: boolean) => void 
 }) => {
-  const [isConnected, setIsConnected] = useState(false);
-  const [address, setAddress] = useState("");
-  const [balance, setBalance] = useState("10.00");
+  const { address, isConnected, chain } = useAccount();
+  const { disconnect } = useDisconnect();
+  const { open } = useWeb3Modal();
+  const { data: balance } = useBalance({
+    address: address,
+  });
 
-  const handleConnect = async () => {
-    toast.loading("Connecting to BNB Chain...");
-    
-    setTimeout(() => {
-      const mockAddress = `0x${Math.random().toString(16).substr(2, 40)}`;
-      setAddress(mockAddress);
-      setIsConnected(true);
-      onConnect(true);
-      
-      toast.success("Wallet connected - BNB Testnet ready");
-    }, 1500);
-  };
+  useEffect(() => {
+    onConnect(isConnected);
+    if (isConnected) {
+      toast.success("Wallet connected to BNB Chain");
+    }
+  }, [isConnected, onConnect]);
 
   const handleDisconnect = () => {
-    setIsConnected(false);
-    setAddress("");
-    onConnect(false);
+    disconnect();
     toast.info("Wallet disconnected");
   };
 
   return (
     <div className="fixed top-4 right-4 z-50">
       {!isConnected ? (
-        <Button onClick={handleConnect}>
+        <Button onClick={() => open()}>
           [CONNECT_WALLET]
         </Button>
       ) : (
@@ -56,17 +53,19 @@ export const WalletConnect = ({
           <div className="space-y-2 text-xs font-mono">
             <div>
               <div className="text-muted-foreground mb-1">ADDRESS:</div>
-              <div>{address.slice(0, 6)}...{address.slice(-4)}</div>
+              <div>{address?.slice(0, 6)}...{address?.slice(-4)}</div>
             </div>
 
             <div>
               <div className="text-muted-foreground mb-1">BALANCE:</div>
-              <div className="text-sm font-bold">{balance} USDC</div>
+              <div className="text-sm font-bold">
+                {balance ? `${parseFloat(balance.formatted).toFixed(4)} ${balance.symbol}` : '0.00 BNB'}
+              </div>
             </div>
 
             <div className="pt-2 border-t border-border">
               <div className="text-muted-foreground">
-                BNB_TESTNET
+                {chain?.name?.toUpperCase() || 'BNB_CHAIN'}
               </div>
             </div>
           </div>
