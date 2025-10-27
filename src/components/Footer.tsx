@@ -13,14 +13,6 @@ export const Footer = () => {
               Join the AI payment revolution. Deploy autonomous agents.
               Launch $GROKPAY Q1/2026.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg">
-                [JOIN_DISCORD]
-              </Button>
-              <Button variant="outline" size="lg">
-                [DEV_DOCS]
-              </Button>
-            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-8">
@@ -31,8 +23,6 @@ export const Footer = () => {
               <ul className="space-y-2 text-sm font-mono">
                 <li><a href="#use-cases" className="hover:text-foreground transition-colors text-muted-foreground">use_cases</a></li>
                 <li><a href="#demo" className="hover:text-foreground transition-colors text-muted-foreground">live_demo</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors text-muted-foreground">documentation</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors text-muted-foreground">sdk_api</a></li>
               </ul>
             </div>
 
@@ -41,9 +31,8 @@ export const Footer = () => {
                 &gt; community
               </div>
               <ul className="space-y-2 text-sm font-mono">
-                <li><a href="#" className="hover:text-foreground transition-colors text-muted-foreground">github</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors text-muted-foreground">twitter_x</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors text-muted-foreground">discord</a></li>
+                <li><a href="https://github.com/Grok-Pay-x402" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors text-muted-foreground">github</a></li>
+                <li><a href="https://x.com/grokpayx402" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors text-muted-foreground">twitter_x</a></li>
               </ul>
             </div>
           </div>
@@ -63,9 +52,8 @@ export const Footer = () => {
             </p>
 
             <div className="flex items-center gap-4 text-xs font-mono">
-              <a href="#" className="hover:text-foreground transition-colors text-muted-foreground">GITHUB</a>
-              <a href="#" className="hover:text-foreground transition-colors text-muted-foreground">X</a>
-              <a href="#" className="hover:text-foreground transition-colors text-muted-foreground">DISCORD</a>
+              <a href="https://github.com/Grok-Pay-x402" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors text-muted-foreground">GITHUB</a>
+              <a href="https://x.com/grokpayx402" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors text-muted-foreground">X</a>
             </div>
           </div>
 
