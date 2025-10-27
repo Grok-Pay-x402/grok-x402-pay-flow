@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/ping",
-      "destination": "https://snmiveqktikbfayedpxc.supabase.co/functions/v1/ping"
-    }
-  ]
-}
