@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
+import logo from "@/assets/grokpay-logo.jpg";
 
 export const WalletConnect = ({ 
   onConnect 
@@ -41,7 +42,7 @@ export const WalletConnect = ({
         <div className="border border-border p-4 bg-background min-w-64">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-foreground" />
+              <img src={logo} alt="GrokPay" className="w-5 h-5 object-contain" />
               <span className="text-xs font-mono uppercase">Connected</span>
             </div>
             <button

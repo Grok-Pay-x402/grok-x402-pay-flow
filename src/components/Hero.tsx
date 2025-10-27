@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import logo from "@/assets/grokpay-logo.jpg";
 
 export const Hero = ({ onConnectWallet }: { onConnectWallet: () => void }) => {
   const [timeLeft, setTimeLeft] = useState({ days: 7, hours: 0, minutes: 0 });
@@ -20,6 +21,11 @@ export const Hero = ({ onConnectWallet }: { onConnectWallet: () => void }) => {
     <section className="min-h-screen flex items-center justify-center px-4 py-20">
       <div className="container max-w-4xl mx-auto">
         <div className="text-center space-y-8">
+          {/* Logo */}
+          <div className="flex justify-center mb-8">
+            <img src={logo} alt="GrokPay x402 Logo" className="w-48 h-48 object-contain" />
+          </div>
+
           {/* Badge */}
           <div className="inline-block border border-foreground px-4 py-2">
             <span className="text-xs font-mono uppercase tracking-widest">
