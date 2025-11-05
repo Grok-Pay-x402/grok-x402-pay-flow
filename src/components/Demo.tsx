@@ -55,7 +55,7 @@ export const Demo = ({
   const [txHash, setTxHash] = useState<string | null>(null);
   const costs = {
     chat: "0.0001",
-    image: "0.0003",
+    image: "0.01",
     agent: "0.03"
   };
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,8 +74,9 @@ export const Demo = ({
     setTxHash(null);
     try {
       // Step 1: Send payment transaction
-      toast.info("Sign the transaction to send 0.0001 USD1 to Giggle Academy Fund...");
-      const amount = parseUnits("0.0001", 18); // Assuming 18 decimals for USD1
+      const costAmount = costs[useCase as keyof typeof costs];
+      toast.info(`Sign the transaction to send ${costAmount} USD1 to Giggle Academy Fund...`);
+      const amount = parseUnits(costAmount, 18); // Assuming 18 decimals for USD1
 
       writeContract({
         address: USD1_CONTRACT,
@@ -120,8 +121,21 @@ export const Demo = ({
             const aiResponse = data.choices?.[0]?.message?.content || "No response";
             setResult(aiResponse);
             toast.success("Chat completed");
+          } else if (useCase === "image") {
+            const {
+              data,
+              error
+            } = await supabase.functions.invoke('grok-image', {
+              body: {
+                prompt: prompt
+              }
+            });
+            if (error) throw error;
+            setImageUrl(data.imageUrl);
+            setResult("Image generated successfully!");
+            toast.success("Image generation completed");
           } else {
-            setResult(`${useCase === "image" ? "Image generation" : "AI Agent deployment"} coming soon - stay tuned!`);
+            setResult("AI Agent deployment coming soon - stay tuned!");
             toast.info("Feature coming soon");
           }
         } catch (error) {
@@ -185,8 +199,8 @@ export const Demo = ({
 
             
 
-              <Button type="submit" size="lg" className="w-full" disabled={isLoading || isWriting || isConfirming || !isWalletConnected || useCase !== "chat"}>
-              {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : useCase !== "chat" ? "[COMING_SOON]" : isWriting ? <>
+              <Button type="submit" size="lg" className="w-full" disabled={isLoading || isWriting || isConfirming || !isWalletConnected || useCase === "agent"}>
+              {!isWalletConnected ? "[CONNECT_WALLET_FIRST]" : useCase === "agent" ? "[COMING_SOON]" : isWriting ? <>
                   <Loader2 className="w-4 h-4 animate-spin" />
                   [SIGN_TRANSACTION...]
                 </> : isConfirming ? <>
@@ -194,8 +208,8 @@ export const Demo = ({
                   [CONFIRMING_PAYMENT...]
                 </> : isLoading ? <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  [PROCESSING_CHAT...]
-                </> : "[PAY_0.0001_USD1_AND_CHAT]"}
+                  {useCase === "image" ? "[GENERATING_IMAGE...]" : "[PROCESSING_CHAT...]"}
+                </> : `[PAY_${costs[useCase as keyof typeof costs]}_USD1_AND_${useCase === "image" ? "GENERATE" : "CHAT"}]`}
             </Button>
           </form>
 

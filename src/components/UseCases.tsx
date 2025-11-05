@@ -10,7 +10,7 @@ const useCases = [
   {
     title: "IMAGE_GEN",
     description: "Generate unique AI images with Grok models",
-    price: "0.0003 USD1",
+    price: "0.01 USD1",
     example: "futuristic_city_flying_cars",
   },
   {
@@ -57,7 +57,7 @@ export const UseCases = ({ onTryDemo }: { onTryDemo: (useCase: string) => void }
                   &gt; {useCase.example}
                 </div>
 
-                {useCase.title === "AI_AGENT" || useCase.title === "IMAGE_GEN" ? (
+                {useCase.title === "AI_AGENT" ? (
                   <div className="w-full py-2 text-center border border-border">
                     <span className="text-xs font-mono text-muted-foreground">[COMING_SOON]</span>
                   </div>
