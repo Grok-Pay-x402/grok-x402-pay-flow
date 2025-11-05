@@ -7,7 +7,7 @@ export const Footer = () => {
             <h3 className="text-2xl font-mono font-bold uppercase mb-4">
               BUILD_ON_X402
             </h3>
-            <p className="text-sm font-mono text-muted-foreground mb-6">Join the AI payment revolution. Deploy autonomous agents. Launch $GPAY Q1/2026.</p>
+            
           </div>
 
           <div className="grid grid-cols-2 gap-8">
@@ -36,10 +36,8 @@ export const Footer = () => {
         <div className="pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 border border-foreground flex items-center justify-center font-mono font-bold text-xs">
-                GP
-              </div>
-              <span className="font-mono font-semibold">GROKPAY_PROXY</span>
+              
+              
             </div>
 
             <p className="text-xs font-mono text-muted-foreground text-center">
@@ -59,14 +57,7 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 border border-border p-6 text-center">
-          <p className="text-sm font-mono mb-2">
-            &gt; dont_miss_x402_wave
-          </p>
-          <p className="text-xs font-mono text-muted-foreground">
-            follow @GROKPAYPROXY for updates
-          </p>
-        </div>
+        
       </div>
     </footer>;
 };
