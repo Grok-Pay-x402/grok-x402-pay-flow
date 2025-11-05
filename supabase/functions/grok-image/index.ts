@@ -70,11 +70,15 @@ serve(async (req) => {
     }
 
     const data = await response.json()
-    console.log('Image generation successful:', data.id)
+    console.log('Image generation response:', JSON.stringify(data))
+
+    // Grok-2-image returns output as a string URL, not an array
+    const imageUrl = data.output || null
+    console.log('Image URL extracted:', imageUrl)
 
     return new Response(
       JSON.stringify({ 
-        imageUrl: data.output?.[0],
+        imageUrl: imageUrl,
         predictionId: data.id
       }),
       { 
